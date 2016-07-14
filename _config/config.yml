@@ -1,6 +1,10 @@
 ---
-Name: socialfeedconfig
+Name: socialfeed
 ---
 SiteConfig:
   extensions:
     - SocialFeedConfigExtension
+
+ContentController:
+  extensions:
+    - SocialFeedControllerExtension
