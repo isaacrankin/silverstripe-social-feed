@@ -20,6 +20,8 @@
 	"require": {
 		"silverstripe/cms": "~3.4",
 		"silverstripe/framework": "~3.4",
-		"facebook/php-sdk-v4" : "~5.0"
+		"facebook/php-sdk-v4" : "~5.0",
+		"league/oauth2-client": "^1.4",
+		"abraham/twitteroauth": "^0.6.4"
 	}
 }

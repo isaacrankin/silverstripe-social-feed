@@ -1,1 +1,9 @@
+# IDE files
 .idea
+
+# vendor packages
+vendor/
+cms/
+framework/
+reports/
+siteconfig/
