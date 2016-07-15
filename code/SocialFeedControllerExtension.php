@@ -10,32 +10,26 @@ class SocialFeedControllerExtension extends DataExtension
 
 	public function SocialFeed()
 	{
-		var_dump($this->getFacebookFeed());
-		die();
-		return new ArrayData($this->getFacebookFeed());
+		return new ArrayList($this->getFacebookFeed());
 	}
 
-	private function combineFeeds($feeds)
-	{
-
-	}
-	
 	public function getFacebookFeed()
 	{
-
-		$fbSession = new Facebook\Facebook([
-			'app_id' => $this->siteConfig->SocialFeedFacebookAppID,
-			'app_secret' => $this->siteConfig->SocialFeedFacebookAppSecret
+		$provider = new \League\OAuth2\Client\Provider\Facebook([
+			'clientId' => $this->siteConfig->SocialFeedFacebookAppID,
+			'clientSecret' => $this->siteConfig->SocialFeedFacebookAppSecret,
+			// https://github.com/thephpleague/oauth2-facebook#graph-api-version
+			'graphApiVersion' => 'v2.6'
 		]);
 
-		// For an App Access Token we can just use our App ID and App Secret piped together
+		// For an App Access Token we can just use our App ID and App Secret pipped together
 		// https://developers.facebook.com/docs/facebook-login/access-tokens#apptokens
-		$fbSession->setDefaultAccessToken($fbSession->getApp()->getId() . '|' . $fbSession->getApp()->getSecret());
+		$accessToken = $this->siteConfig->SocialFeedFacebookAppID . '|' . $this->siteConfig->SocialFeedFacebookAppSecret;
 
 		// Get all data for the FB page
-		$request = $fbSession->get('/' . $this->siteConfig->SocialFeedFacebookPageID . '/feed');
+		$request = $provider->getRequest('GET', 'https://graph.facebook.com/'. $this->siteConfig->SocialFeedFacebookPageID .'/feed?access_token=' . $accessToken);
+		$result = $provider->getResponse($request);
 
-		// Just return the data (there's loads of meta data in the whole request)
-		return json_decode($request->getBody());
+		return $result['data'];
 	}
 }
