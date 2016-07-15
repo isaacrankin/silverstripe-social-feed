@@ -1,7 +1,8 @@
 <?php
 
 use \Abraham\TwitterOAuth\TwitterOAuth;
-use \League\OAuth2\Client\Provider;
+use \League\OAuth2\Client\Provider\Facebook;
+use \League\OAuth2\Client\Provider\Instagram;
 
 class SocialFeedControllerExtension extends DataExtension
 {
@@ -13,17 +14,20 @@ class SocialFeedControllerExtension extends DataExtension
 
 	public function SocialFeed()
 	{
-		$this->getTwitterFeed();
-		return new ArrayList($this->getFacebookFeed());
+//		$twitterData = $this->getTwitter();
+//		$facebookData = $this->getFacebook();
+		$instagramData = $this->getInstagram();
+
+		return new ArrayList(array());
 	}
 
-	private function getTwitterFeed()
+	private function getTwitter()
 	{
 		$connection = new TwitterOAuth($this->siteConfig->SocialFeedTwitterConsumerKey, $this->siteConfig->SocialFeedTwitterConsumerSecret, $this->siteConfig->SocialFeedTwitterAccessToken, $this->siteConfig->SocialFeedTwitterAccessTokenSecret);
 		return $connection->get('statuses/user_timeline', ['count' => 25, 'exclude_replies' => true]);
 	}
 
-	private function getFacebookFeed()
+	private function getFacebook()
 	{
 		$provider = new Facebook([
 			'clientId' => $this->siteConfig->SocialFeedFacebookAppID,
@@ -41,5 +45,24 @@ class SocialFeedControllerExtension extends DataExtension
 		$result = $provider->getResponse($request);
 
 		return $result['data'];
+	}
+
+	private function getInstagram()
+	{
+		$provider = new Instagram([
+			'clientId' => $this->siteConfig->SocialFeedInstagramClientID,
+			'clientSecret' => $this->siteConfig->SocialFeedInstagramClientSecret
+		]);
+
+		$accessToken = $this->siteConfig->SocialFeedInstagramClientID . '|' . $this->siteConfig->SocialFeedInstagramClientSecret;
+
+		// Get all data for the FB page
+		$request = $provider->getRequest('GET', 'https://api.instagram.com/v1/users/self/media/recent/?access_token=' . $accessToken);
+		$result = $provider->getResponse($request);
+
+		var_dump($result);
+		die();
+//
+//		return $result['data'];
 	}
 }
