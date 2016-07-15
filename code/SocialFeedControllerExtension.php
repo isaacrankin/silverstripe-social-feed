@@ -1,5 +1,8 @@
 <?php
 
+use \Abraham\TwitterOAuth\TwitterOAuth;
+use \League\OAuth2\Client\Provider;
+
 class SocialFeedControllerExtension extends DataExtension
 {
 	public function __construct()
@@ -10,12 +13,19 @@ class SocialFeedControllerExtension extends DataExtension
 
 	public function SocialFeed()
 	{
+		$this->getTwitterFeed();
 		return new ArrayList($this->getFacebookFeed());
 	}
 
-	public function getFacebookFeed()
+	private function getTwitterFeed()
 	{
-		$provider = new \League\OAuth2\Client\Provider\Facebook([
+		$connection = new TwitterOAuth($this->siteConfig->SocialFeedTwitterConsumerKey, $this->siteConfig->SocialFeedTwitterConsumerSecret, $this->siteConfig->SocialFeedTwitterAccessToken, $this->siteConfig->SocialFeedTwitterAccessTokenSecret);
+		return $connection->get('statuses/user_timeline', ['count' => 25, 'exclude_replies' => true]);
+	}
+
+	private function getFacebookFeed()
+	{
+		$provider = new Facebook([
 			'clientId' => $this->siteConfig->SocialFeedFacebookAppID,
 			'clientSecret' => $this->siteConfig->SocialFeedFacebookAppSecret,
 			// https://github.com/thephpleague/oauth2-facebook#graph-api-version
