@@ -14,8 +14,15 @@ class SocialFeedConfigExtension extends DataExtension
 		'SocialFeedTwitterAccessTokenSecret' => 'Varchar(400)',
 		// Instagram
 		'SocialFeedInstagramClientID' => 'Varchar(400)',
-		'SocialFeedInstagramClientSecret' => 'Varchar(400)'
+		'SocialFeedInstagramClientSecret' => 'Varchar(400)',
+		'SocialFeedInstagramAccessToken' => 'Varchar(400)'
 	);
+
+	public function __construct()
+	{
+		parent::__construct();
+//		echo '<script>console.log("config extension hello world");</script>';
+	}
 
 	public function updateCMSFields(FieldList $fields)
 	{
@@ -37,5 +44,9 @@ class SocialFeedConfigExtension extends DataExtension
 		$fields->addFieldsToTab('Root.SocialFeed', new LiteralField('sf_html_7', '<p>To get the necessary Instagram API credentials you\'ll need to create an <a href="https://www.instagram.com/developer/clients/manage/" target="_blank">Instagram Client.</a></p>'));
 		$fields->addFieldsToTab('Root.SocialFeed', new TextField('SocialFeedInstagramClientID', 'Client ID'));
 		$fields->addFieldsToTab('Root.SocialFeed', new TextField('SocialFeedInstagramClientSecret', 'Client Secret'));
+		$fields->addFieldsToTab('Root.SocialFeed', new LiteralField('sf_html_8', '<p><button type="link" href="http://google.com">Get Access Token</button></p>'));
+		$fields->addFieldsToTab('Root.SocialFeed', new TextField('SocialFeedInstagramAccessToken', 'Access Token'));
 	}
+
+
 }

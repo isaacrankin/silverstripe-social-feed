@@ -14,9 +14,13 @@ class SocialFeedControllerExtension extends DataExtension
 
 	public function SocialFeed()
 	{
+		echo '<a href="';
+		echo 'https://api.instagram.com/oauth/authorize/?client_id=' . $this->siteConfig->SocialFeedInstagramClientID . '&redirect_uri='. 'http://isaacrankin.com' . '&response_type=code';
+		echo '">Authorize</a>';
+//
 //		$twitterData = $this->getTwitter();
 //		$facebookData = $this->getFacebook();
-		$instagramData = $this->getInstagram();
+//		$instagramData = $this->getInstagram();
 
 		return new ArrayList(array());
 	}
@@ -51,13 +55,16 @@ class SocialFeedControllerExtension extends DataExtension
 	{
 		$provider = new Instagram([
 			'clientId' => $this->siteConfig->SocialFeedInstagramClientID,
-			'clientSecret' => $this->siteConfig->SocialFeedInstagramClientSecret
+			'clientSecret' => $this->siteConfig->SocialFeedInstagramClientSecret,
+			'redirectUri' => 'http://isaacrankin.com'
 		]);
 
-		$accessToken = $this->siteConfig->SocialFeedInstagramClientID . '|' . $this->siteConfig->SocialFeedInstagramClientSecret;
+		$token = $provider->getAccessToken('authorization_code', [
+			'code' => $this->siteConfig->SocialFeedInstagramAccessToken
+		]);
 
 		// Get all data for the FB page
-		$request = $provider->getRequest('GET', 'https://api.instagram.com/v1/users/self/media/recent/?access_token=' . $accessToken);
+		$request = $provider->getRequest('GET', 'https://api.instagram.com/v1/users/self/media/recent/?access_token=' . $token);
 		$result = $provider->getResponse($request);
 
 		var_dump($result);
