@@ -19,4 +19,8 @@ class SocialFeedProviderTwitter extends SocialFeedProvider
 		return $fields;
 	}
 
+	public function getCMSValidator()
+	{
+		return new RequiredFields(array('ConsumerKey', 'ConsumerSecret'));
+	}
 }

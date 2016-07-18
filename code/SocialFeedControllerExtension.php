@@ -14,9 +14,9 @@ class SocialFeedControllerExtension extends DataExtension
 
 	public function SocialFeed()
 	{
-		echo '<a href="';
-		echo 'https://api.instagram.com/oauth/authorize/?client_id=' . $this->siteConfig->SocialFeedInstagramClientID . '&redirect_uri='. 'http://isaacrankin.com' . '&response_type=code';
-		echo '">Authorize</a>';
+//		echo '<a href="';
+//		echo 'https://api.instagram.com/oauth/authorize/?client_id=' . $this->siteConfig->SocialFeedInstagramClientID . '&redirect_uri='. 'http://isaacrankin.com' . '&response_type=code';
+//		echo '">Authorize</a>';
 //
 //		$twitterData = $this->getTwitter();
 //		$facebookData = $this->getFacebook();

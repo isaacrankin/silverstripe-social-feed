@@ -17,4 +17,9 @@ class SocialFeedProviderInstagram extends SocialFeedProvider
 		$fields->addFieldsToTab('Root.Main', new LiteralField('sf_html_7', '<h4>To get the necessary Instagram API credentials you\'ll need to create an <a href="https://www.instagram.com/developer/clients/manage/" target="_blank">Instagram Client.</a></h4><p>&nbsp;</p>'), 'Label');
 		return $fields;
 	}
+
+	public function getCMSValidator()
+	{
+		return new RequiredFields(array('ClientID', 'ClientSecret'));
+	}
 }
