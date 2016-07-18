@@ -1,5 +1,7 @@
 <?php
 
+use \Abraham\TwitterOAuth\TwitterOAuth;
+
 class SocialFeedProviderTwitter extends SocialFeedProvider
 {
 	private static $db = array (
@@ -22,5 +24,12 @@ class SocialFeedProviderTwitter extends SocialFeedProvider
 	public function getCMSValidator()
 	{
 		return new RequiredFields(array('ConsumerKey', 'ConsumerSecret'));
+	}
+
+	public function getFeed()
+	{
+		// NOTE: Twitter doesn't implement OAuth 2 so we can't use https://github.com/thephpleague/oauth2-client
+		$connection = new TwitterOAuth($this->ConsumerKey, $this->ConsumerSecret, $this->AccessToken, $this->AccessTokenSecret);
+		return $connection->get('statuses/user_timeline', ['count' => 25, 'exclude_replies' => true]);
 	}
 }
