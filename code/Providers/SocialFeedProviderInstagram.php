@@ -19,7 +19,7 @@ class SocialFeedProviderInstagram extends SocialFeedProvider
 	{
 		$fields = parent::getCMSFields();
 		$fields->addFieldsToTab('Root.Main', new LiteralField('sf_html_1', '<h4>To get the necessary Instagram API credentials you\'ll need to create an <a href="https://www.instagram.com/developer/clients/manage/" target="_blank">Instagram Client.</a></h4>'), 'Label');
-		$fields->addFieldsToTab('Root.Main', new LiteralField('sf_html_2', '<p>You\'ll need to add the following redirect URI <code>' . $this->getRedirectUri() . '</code></p>'), 'Label');
+		$fields->addFieldsToTab('Root.Main', new LiteralField('sf_html_2', '<p>You\'ll need to add the following redirect URI <code>' . $this->getRedirectUri() . '</code> in the settings for the Instagram App.</p>'), 'Label');
 
 		if ($this->ClientID && $this->ClientSecret) {
 			$url = $this->authBaseURL . '?client_id=' . $this->ClientID . '&response_type=code&redirect_uri=' . $this->getRedirectUri() . '?provider_id=' . $this->ID;

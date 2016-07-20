@@ -10,32 +10,65 @@ class SocialFeedControllerExtension extends DataExtension
 
 	public function SocialFeed()
 	{
-		// Facebook data
+		$combinedData = array();
+
+		// get data for all FB providers
 		$facebookProviders = SocialFeedProviderFacebook::get();
-		$fbData = array();
 
 		foreach ($facebookProviders as $fbProv) {
-			array_push($fbData, $fbProv->getFeed());
+
+			$feed = $fbProv->getFeed();
+
+			foreach ($feed as $post) {
+				array_push($combinedData, array(
+					'Type' => 'facebook',
+					'Created' => $post['created_time'],
+					'Data' => $post,
+					'URL' => ($post['actions'][0]['name'] === 'Share') ? $post['actions'][0]['link'] : false
+				));
+			}
+
 		}
 
-		// Twitter data
+		// get data for all Twitter providers
 		$twitterProviders = SocialFeedProviderTwitter::get();
-		$twData = array();
-
 		foreach ($twitterProviders as $twProv) {
-			array_push($twData, $twProv->getFeed());
+
+			$feed = $twProv->getFeed();
+
+			foreach ($feed as $post) {
+				array_push($combinedData, array(
+					'Type' => 'twitter',
+					'Created' => $post->created_at,
+					'Data' => $post,
+					'URL' => 'https://twitter.com/' . (string) $post->user->id .'/status/' . (string) $post->id
+				));
+			}
+
 		}
 
-		// Instagram data
-		$instagramProviders = SocialFeedProviderInstagram::get();
-		$instData = array();
 
-		foreach ($instagramProviders as $instProv) {
-			array_push($instData, $instProv->getFeed());
-		}
 
-		//TODO: combine data together - include a "type" property
+//		// Twitter data
+//		$twitterProviders = SocialFeedProviderTwitter::get();
+//		$twData = array();
+//
+//		foreach ($twitterProviders as $twProv) {
+//			array_push($twData, $twProv->getFeed());
+//		}
+//
+//		// Instagram data
+//		$instagramProviders = SocialFeedProviderInstagram::get();
+//		$instData = array();
+//
+//		foreach ($instagramProviders as $instProv) {
+//			array_push($instData, $instProv->getFeed());
+//		}
 
-		return new ArrayList(array());
+		//TODO: combine data together - include a "type" property - order by date
+
+
+
+		return new ArrayList($combinedData);
 	}
 }
