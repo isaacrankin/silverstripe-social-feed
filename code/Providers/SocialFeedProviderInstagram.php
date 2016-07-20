@@ -79,6 +79,6 @@ class SocialFeedProviderInstagram extends SocialFeedProvider
 
 		$request = $provider->getRequest('GET', 'https://api.instagram.com/v1/users/self/media/recent/?access_token=' . $this->AccessToken);
 		$result = $provider->getResponse($request);
-		return $result;
+		return $result['data'];
 	}
 }

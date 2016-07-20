@@ -12,7 +12,24 @@ class SocialFeedControllerExtension extends DataExtension
 	{
 		$combinedData = array();
 
-		// get data for all FB providers
+		// Get data for all Instagram providers
+		$instagramProviders = SocialFeedProviderInstagram::get();
+		foreach ($instagramProviders as $instProv) {
+
+			$feed = $instProv->getFeed();
+
+			foreach ($feed as $post) {
+				array_push($combinedData, array(
+					'Type' => 'instagram',
+					'Created' => $post['created_time'],
+					'Data' => $post,
+					'URL' => $post['link']
+				));
+			}
+
+		}
+
+		// Get data for all FB providers
 		$facebookProviders = SocialFeedProviderFacebook::get();
 
 		foreach ($facebookProviders as $fbProv) {
@@ -30,7 +47,7 @@ class SocialFeedControllerExtension extends DataExtension
 
 		}
 
-		// get data for all Twitter providers
+		// Get data for all Twitter providers
 		$twitterProviders = SocialFeedProviderTwitter::get();
 		foreach ($twitterProviders as $twProv) {
 
@@ -46,28 +63,6 @@ class SocialFeedControllerExtension extends DataExtension
 			}
 
 		}
-
-
-
-//		// Twitter data
-//		$twitterProviders = SocialFeedProviderTwitter::get();
-//		$twData = array();
-//
-//		foreach ($twitterProviders as $twProv) {
-//			array_push($twData, $twProv->getFeed());
-//		}
-//
-//		// Instagram data
-//		$instagramProviders = SocialFeedProviderInstagram::get();
-//		$instData = array();
-//
-//		foreach ($instagramProviders as $instProv) {
-//			array_push($instData, $instProv->getFeed());
-//		}
-
-		//TODO: combine data together - include a "type" property - order by date
-
-
 
 		return new ArrayList($combinedData);
 	}

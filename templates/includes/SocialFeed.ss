@@ -1,4 +1,4 @@
-<div>
+<div class="social-feed">
 	<ol>
 		<% loop SocialFeed %>
 			<li>
@@ -17,9 +17,10 @@
 					<% else_if $Type == 'twitter' %>
 						<p>URL: $URL</p>
 						<p>$Data.text</p>
+
 					<%-- Instagram Post --%>
 					<% else_if $Type == 'instagram' %>
-
+						<p><img src="$Data.images.thumbnail.url" alt="" width="$Data.images.thumbnail.width" height="$Data.images.thumbnail.height"></p>
 					<% end_if %>
 				</a>
 			</li>
