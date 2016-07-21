@@ -10,60 +10,33 @@ class SocialFeedControllerExtension extends DataExtension
 
 	public function SocialFeed()
 	{
-		$combinedData = array();
+		$combinedData = $this->getProviderFeed(SocialFeedProviderInstagram::get());
+		$combinedData = $this->getProviderFeed(SocialFeedProviderFacebook::get(), $combinedData);
+		$combinedData = $this->getProviderFeed(SocialFeedProviderTwitter::get(), $combinedData);
 
-		// Get data for all Instagram providers
-		$instagramProviders = SocialFeedProviderInstagram::get();
-		foreach ($instagramProviders as $instProv) {
-
-			$feed = $instProv->getFeed();
-
-			foreach ($feed as $post) {
-				array_push($combinedData, array(
-					'Type' => 'instagram',
-					'Created' => $post['created_time'],
-					'Data' => $post,
-					'URL' => $post['link']
-				));
-			}
-
-		}
-
-		// Get data for all FB providers
-		$facebookProviders = SocialFeedProviderFacebook::get();
-
-		foreach ($facebookProviders as $fbProv) {
-
-			$feed = $fbProv->getFeed();
-
-			foreach ($feed as $post) {
-				array_push($combinedData, array(
-					'Type' => 'facebook',
-					'Created' => $post['created_time'],
-					'Data' => $post,
-					'URL' => ($post['actions'][0]['name'] === 'Share') ? $post['actions'][0]['link'] : false
-				));
-			}
-
-		}
-
-		// Get data for all Twitter providers
-		$twitterProviders = SocialFeedProviderTwitter::get();
-		foreach ($twitterProviders as $twProv) {
-
-			$feed = $twProv->getFeed();
-
-			foreach ($feed as $post) {
-				array_push($combinedData, array(
-					'Type' => 'twitter',
-					'Created' => $post->created_at,
-					'Data' => $post,
-					'URL' => 'https://twitter.com/' . (string) $post->user->id .'/status/' . (string) $post->id
-				));
-			}
-
-		}
+		//TODO: normalize and order by creation time
 
 		return new ArrayList($combinedData);
+	}
+
+	private function getProviderFeed($providers, $data = array())
+	{
+		foreach ($providers as $prov) {
+
+			if (is_subclass_of($prov, 'SocialFeedProvider')) {
+
+				$feed = $prov->getFeed();
+
+				foreach ($feed as $post) {
+					array_push($data, array(
+						'Type' => $prov->getType(),
+						'Data' => $post,
+						'Created' => $prov->getPostCreated($post),
+						'URL' => $prov->getPostUrl($post)
+					));
+				}
+			}
+		}
+		return $data;
 	}
 }

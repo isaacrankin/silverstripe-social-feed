@@ -2,7 +2,7 @@
 
 use \League\OAuth2\Client\Provider\Instagram;
 
-class SocialFeedProviderInstagram extends SocialFeedProvider
+class SocialFeedProviderInstagram extends SocialFeedProvider implements SocialFeedProviderInterface
 {
 	private static $db = array(
 		'ClientID' => 'Varchar(400)',
@@ -14,6 +14,8 @@ class SocialFeedProviderInstagram extends SocialFeedProvider
 	private static $plural_name = 'Instagram Provider\'s';
 
 	private $authBaseURL = 'https://api.instagram.com/oauth/authorize/';
+
+	private $type = 'instagram';
 
 	public function getCMSFields()
 	{
@@ -65,6 +67,16 @@ class SocialFeedProviderInstagram extends SocialFeedProvider
 	}
 
 	/**
+	 * Return the type of provider
+	 *
+	 * @return string
+	 */
+	public function getType()
+	{
+		return $this->type;
+	}
+
+	/**
 	 * Fetch Instagram data for authorized user
 	 *
 	 * @return mixed
@@ -80,5 +92,27 @@ class SocialFeedProviderInstagram extends SocialFeedProvider
 		$request = $provider->getRequest('GET', 'https://api.instagram.com/v1/users/self/media/recent/?access_token=' . $this->AccessToken);
 		$result = $provider->getResponse($request);
 		return $result['data'];
+	}
+
+	/**
+	 * Get the creation time from a post
+	 *
+	 * @param $post
+	 * @return mixed
+	 */
+	public function getPostCreated($post)
+	{
+		return $post['created_time'];
+	}
+
+	/**
+	 * Get the post URL from a post
+	 *
+	 * @param $post
+	 * @return mixed
+	 */
+	public function getPostUrl($post)
+	{
+		return $post['link'];
 	}
 }

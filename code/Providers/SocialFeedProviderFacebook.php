@@ -2,7 +2,7 @@
 
 use \League\OAuth2\Client\Provider\Facebook;
 
-class SocialFeedProviderFacebook extends SocialFeedProvider
+class SocialFeedProviderFacebook extends SocialFeedProvider implements SocialFeedProviderInterface
 {
 	private static $db = array(
 		'FacebookPageID' => 'Varchar(100)',
@@ -19,6 +19,8 @@ class SocialFeedProviderFacebook extends SocialFeedProvider
 		'Enabled',
 		'FacebookPageID'
 	);
+
+	private $type = 'facebook';
 
 	public function getCMSFields()
 	{
@@ -42,6 +44,16 @@ class SocialFeedProviderFacebook extends SocialFeedProvider
 		parent::onBeforeWrite();
 	}
 
+	/**
+	 * Return the type of provider
+	 *
+	 * @return string
+	 */
+	public function getType()
+	{
+		return $this->type;
+	}
+
 	public function getFeed()
 	{
 		$provider = new Facebook([
@@ -61,4 +73,28 @@ class SocialFeedProviderFacebook extends SocialFeedProvider
 
 		return $result['data'];
 	}
+
+	/**
+	 * Get the creation time from a post
+	 *
+	 * @param $post
+	 * @return mixed
+	 */
+	public function getPostCreated($post)
+	{
+		return $post['created_time'];
+	}
+
+	/**
+	 * Get the post URL from a post
+	 *
+	 * @param $post
+	 * @return mixed
+	 */
+	public function getPostUrl($post)
+	{
+		return ($post['actions'][0]['name'] === 'Share') ? $post['actions'][0]['link'] : '';
+	}
+
+
 }

@@ -2,7 +2,7 @@
 
 use \Abraham\TwitterOAuth\TwitterOAuth;
 
-class SocialFeedProviderTwitter extends SocialFeedProvider
+class SocialFeedProviderTwitter extends SocialFeedProvider implements SocialFeedProviderInterface
 {
 	private static $db = array (
 		'ConsumerKey' => 'Varchar(400)',
@@ -13,6 +13,8 @@ class SocialFeedProviderTwitter extends SocialFeedProvider
 
 	private static $singular_name = 'Twitter Provider';
 	private static $plural_name = 'Twitter Provider\'s';
+
+	private $type = 'twitter';
 
 	public function getCMSFields()
 	{
@@ -27,10 +29,42 @@ class SocialFeedProviderTwitter extends SocialFeedProvider
 		return new RequiredFields(array('ConsumerKey', 'ConsumerSecret'));
 	}
 
+	/**
+	 * Return the type of provider
+	 *
+	 * @return string
+	 */
+	public function getType()
+	{
+		return $this->type;
+	}
+
 	public function getFeed()
 	{
 		// NOTE: Twitter doesn't implement OAuth 2 so we can't use https://github.com/thephpleague/oauth2-client
 		$connection = new TwitterOAuth($this->ConsumerKey, $this->ConsumerSecret, $this->AccessToken, $this->AccessTokenSecret);
 		return $connection->get('statuses/user_timeline', ['count' => 25, 'exclude_replies' => true]);
+	}
+
+	/**
+	 * Get the creation time from a post
+	 *
+	 * @param $post
+	 * @return mixed
+	 */
+	public function getPostCreated($post)
+	{
+		return $post->created_at;
+	}
+
+	/**
+	 * Get the post URL from a post
+	 *
+	 * @param $post
+	 * @return mixed
+	 */
+	public function getPostUrl($post)
+	{
+		return 'https://twitter.com/' . (string) $post->user->id .'/status/' . (string) $post->id;
 	}
 }
