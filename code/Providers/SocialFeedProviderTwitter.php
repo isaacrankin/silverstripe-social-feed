@@ -39,7 +39,7 @@ class SocialFeedProviderTwitter extends SocialFeedProvider implements SocialFeed
 		return $this->type;
 	}
 
-	public function getFeed()
+	public function getFeedUncached()
 	{
 		// NOTE: Twitter doesn't implement OAuth 2 so we can't use https://github.com/thephpleague/oauth2-client
 		$connection = new TwitterOAuth($this->ConsumerKey, $this->ConsumerSecret, $this->AccessToken, $this->AccessTokenSecret);

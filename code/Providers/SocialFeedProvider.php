@@ -37,6 +37,50 @@ class SocialFeedProvider extends DataObject
 		return $fields;
 	}
 
+	/**
+	 * Get feed from provider, will automatically cache the result
+	 *
+	 * @return SS_List
+	 */
+	public function getFeed() {
+		$feed = $this->getFeedCache();
+		if (!$feed) {
+		    $feed = $this->getFeedUncached();
+		    $this->setFeedCache($feed);
+		    if (class_exists('AbstractQueuedJob')) {
+		    	singleton('SocialFeedCacheQueuedJob')->createJob($this);
+		    }
+		}
+
+		$data = array();
+		if ($feed) {
+			foreach ($feed as $post) {
+				$created = SS_Datetime::create();
+				$created->setValue($this->getPostCreated($post));
+
+				$data[] = array(
+					'Type' => $this->getType(),
+					'Created' => $created,
+					'URL' => $this->getPostUrl($post),
+					'Data' => $post,
+				);
+			}
+		}
+		$result = ArrayList::create($data);
+		$result = $result->sort('Created', 'DESC');
+		return $result;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getFeedUncached() {
+		throw new Exception($this->class.' missing implementation for '.__FUNCTION__);
+	}
+
+	/**
+	 * @return array
+	 */
 	public function getFeedCache() {
 		$cache = $this->getCacheFactory();
 		$feedStore = $cache->load($this->ID);

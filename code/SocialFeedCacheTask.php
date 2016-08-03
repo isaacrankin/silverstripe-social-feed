@@ -12,7 +12,7 @@ class SocialFeedCacheTask extends BuildTask {
 			foreach ($providers as $prov)
 			{
 				$this->log('Getting feed for #'.$prov->ID.' ('.$prov->ClassName.')');
-				$feed = $prov->getFeed();
+				$feed = $prov->getFeedUncached();
 				$prov->setFeedCache($feed);
 				$this->log('Updated feed cache for #'.$prov->ID.' ('.$prov->ClassName.')');
 			}

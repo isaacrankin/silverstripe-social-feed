@@ -11,6 +11,10 @@ class SocialFeedCacheQueuedJob extends AbstractQueuedJob {
 	 */
 	private static $cache_time_offset = -300;
 
+	/**
+	 * Setup job that updates the feed cache 5 minutes before it expires so
+	 * the end-user doesn't experience page-load time slowdown.
+	 */
 	public function createJob($prov) {
 		$time = $prov->getFeedCacheExpiry();
 		$runDate = date('Y-m-d H:i:s', time());
@@ -45,7 +49,7 @@ class SocialFeedCacheQueuedJob extends AbstractQueuedJob {
 
 	public function process() {
 		if ($prov = $this->getObject()) {
-			$feed = $prov->getFeed();
+			$feed = $prov->getFeedUncached();
 			$prov->setFeedCache($feed);
 		}
 		$this->currentStep = 1;

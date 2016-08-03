@@ -65,7 +65,7 @@ class SocialFeedProviderFacebook extends SocialFeedProvider implements SocialFee
 		return $this->type;
 	}
 
-	public function getFeed()
+	public function getFeedUncached()
 	{
 		$provider = new Facebook([
 			'clientId' => $this->FacebookAppID,

@@ -2,12 +2,6 @@
 
 class SocialFeedControllerExtension extends DataExtension
 {
-	public function __construct()
-	{
-		parent::__construct();
-		$this->siteConfig = SiteConfig::current_site_config();
-	}
-
 	public function onBeforeInit() 
 	{
 		if (Director::isDev()) {
@@ -35,29 +29,10 @@ class SocialFeedControllerExtension extends DataExtension
 	private function getProviderFeed($providers, $data = array())
 	{
 		foreach ($providers as $prov) {
-
 			if (is_subclass_of($prov, 'SocialFeedProvider')) {
-				$feed = $prov->getFeedCache();
-
-				if (!$feed) {
-				    $feed = $prov->getFeed();
-				    $prov->setFeedCache($feed);
-				    if (class_exists('AbstractQueuedJob')) {
-				    	singleton('SocialFeedCacheQueuedJob')->createJob($prov);
-				    }
-				}
-
-				if ($feed) {
-					foreach ($feed as $post) {
-						$created = SS_Datetime::create();
-						$created->setValue($prov->getPostCreated($post));
-
-						array_push($data, array(
-							'Type' => $prov->getType(),
-							'Data' => $post,
-							'Created' => $created,
-							'URL' => $prov->getPostUrl($post)
-						));
+				if ($feed = $prov->getFeed()) {
+					foreach ($feed->toArray() as $post) {
+						$data[] = $post;
 					}
 				}
 			}
