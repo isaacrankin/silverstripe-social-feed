@@ -25,7 +25,7 @@ Alternatively you can call the `SocialFeed` method directly like so:
 </ol>
 ```
 
-[See a more detailed example](https://github.com/isaacwebfix/silverstripe-social-feed/blob/master/templates/includes/SocialFeed.ss)
+[See a more detailed example](https://github.com/isaacrankin/silverstripe-social-feed/blob/master/templates/includes/SocialFeed.ss)
 
 The posts are ordered from newest to oldest. 
 

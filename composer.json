@@ -2,17 +2,16 @@
 	"name": "isaacrankin/silverstripe-social-feed",
 	"description": "A social feed module for fetching content from Facebook and Twitter",
 	"type": "silverstripe-module",
-	"homepage": "http://github.com/isaacwebfix/silverstripe-social-feed",
+	"homepage": "http://github.com/isaacrankin/silverstripe-social-feed",
 	"keywords": ["silverstripe", "facebook", "twitter", "instagram", "social feed"],
 	"license": "BSD-3-Clause",
 	"authors": [
 		{
-			"name": "Isaac Rankin",
-			"email": "isaac.webfix@gmail.com"
+			"name": "Isaac Rankin"
 		}
 	],
 	"support": {
-		"issues": "http://github.com/isaacwebfix/silverstripe-social-feed/issues"
+		"issues": "http://github.com/isaacrankin/silverstripe-social-feed/issues"
 	},
 	"extra": {
 		"installer-name": "social-feed"
