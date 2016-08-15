@@ -3,7 +3,7 @@
 	"description": "A social feed module for fetching content from Facebook and Twitter",
 	"type": "silverstripe-module",
 	"homepage": "http://github.com/isaacwebfix/silverstripe-social-feed",
-	"keywords": ["silverstripe", "facebook", "twitter", "social feed"],
+	"keywords": ["silverstripe", "facebook", "twitter", "instagram", "social feed"],
 	"license": "BSD-3-Clause",
 	"authors": [
 		{
