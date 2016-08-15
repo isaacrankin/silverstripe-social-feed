@@ -39,11 +39,15 @@ class SocialFeedProviderTwitter extends SocialFeedProvider implements SocialFeed
 		return $this->type;
 	}
 
-	public function getFeed()
+	public function getFeedUncached()
 	{
 		// NOTE: Twitter doesn't implement OAuth 2 so we can't use https://github.com/thephpleague/oauth2-client
 		$connection = new TwitterOAuth($this->ConsumerKey, $this->ConsumerSecret, $this->AccessToken, $this->AccessTokenSecret);
-		return $connection->get('statuses/user_timeline', ['count' => 25, 'exclude_replies' => true]);
+		$result = $connection->get('statuses/user_timeline', ['count' => 25, 'exclude_replies' => true]);
+		if (isset($result->error)) {
+			user_error($result->error, E_USER_WARNING);
+		}
+		return $result;
 	}
 
 	/**
