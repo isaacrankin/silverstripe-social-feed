@@ -2,10 +2,16 @@
 
 class SocialFeedControllerExtension extends DataExtension
 {
-	public function __construct()
+	public function onBeforeInit()
 	{
-		parent::__construct();
-		$this->siteConfig = SiteConfig::current_site_config();
+		if (Director::isDev()) {
+			// Allow easy clearing of the cache in dev mode
+			if (isset($_GET['socialfeedclearcache']) && $_GET['socialfeedclearcache'] == 1) {
+				foreach (SocialFeedProvider::get() as $prov) {
+					$prov->clearFeedCache();
+				}
+			}
+		}
 	}
 
 	public function SocialFeed()
@@ -14,26 +20,19 @@ class SocialFeedControllerExtension extends DataExtension
 		$combinedData = $this->getProviderFeed(SocialFeedProviderFacebook::get()->filter('Enabled', 1), $combinedData);
 		$combinedData = $this->getProviderFeed(SocialFeedProviderTwitter::get()->filter('Enabled', 1), $combinedData);
 
-		//TODO: normalize and order by creation time
-
-		return new ArrayList($combinedData);
+		$result = new ArrayList($combinedData);
+		$result = $result->sort('Created', 'DESC');
+		return $result;
 	}
 
 	private function getProviderFeed($providers, $data = array())
 	{
 		foreach ($providers as $prov) {
-
 			if (is_subclass_of($prov, 'SocialFeedProvider')) {
-
-				$feed = $prov->getFeed();
-
-				foreach ($feed as $post) {
-					array_push($data, array(
-						'Type' => $prov->getType(),
-						'Data' => $post,
-						'Created' => $prov->getPostCreated($post),
-						'URL' => $prov->getPostUrl($post)
-					));
+				if ($feed = $prov->getFeed()) {
+					foreach ($feed->toArray() as $post) {
+						$data[] = $post;
+					}
 				}
 			}
 		}
