@@ -10,9 +10,9 @@ class SocialFeedControllerExtension extends DataExtension
 
 	public function SocialFeed()
 	{
-		$combinedData = $this->getProviderFeed(SocialFeedProviderInstagram::get());
-		$combinedData = $this->getProviderFeed(SocialFeedProviderFacebook::get(), $combinedData);
-		$combinedData = $this->getProviderFeed(SocialFeedProviderTwitter::get(), $combinedData);
+		$combinedData = $this->getProviderFeed(SocialFeedProviderInstagram::get()->filter('Enabled', 1));
+		$combinedData = $this->getProviderFeed(SocialFeedProviderFacebook::get()->filter('Enabled', 1), $combinedData);
+		$combinedData = $this->getProviderFeed(SocialFeedProviderTwitter::get()->filter('Enabled', 1), $combinedData);
 
 		//TODO: normalize and order by creation time
 
