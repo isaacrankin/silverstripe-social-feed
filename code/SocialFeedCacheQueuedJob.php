@@ -8,6 +8,8 @@ class SocialFeedCacheQueuedJob extends AbstractQueuedJob {
 	/**
 	 * Set queued job execution time to be 5 minutes before the cache expires
 	 * by default.
+	 *
+	 * @var int
 	 */
 	private static $cache_time_offset = -300;
 
@@ -34,6 +36,9 @@ class SocialFeedCacheQueuedJob extends AbstractQueuedJob {
 		}
 	}
 
+	/**
+	 * Get the name of the job to show in the QueuedJobsAdmin.
+	 */
 	public function getTitle() {
 		$provider = $this->getObject();
 		return _t(
@@ -47,6 +52,10 @@ class SocialFeedCacheQueuedJob extends AbstractQueuedJob {
 		);
 	}
 
+	/**
+	 * Gets the providers feed and stores it in the
+	 * providers cache.
+	 */
 	public function process() {
 		if ($prov = $this->getObject()) {
 			$feed = $prov->getFeedUncached();
