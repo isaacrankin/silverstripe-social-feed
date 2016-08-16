@@ -4,6 +4,9 @@ class SocialFeedCacheTask extends BuildTask {
 	protected $title       = 'Social Feed Pre-Load Task';
 	protected $description = 'Calls getFeed on each SocialFeedProvider and caches it. This task exists so a cronjob can be setup to update social feeds without exposing an end user to slowdown.';
 
+	/**
+	 * Gets the feed for each provider and updates the cache with it.
+	 */
 	public function run($request) {
 		$providers = SocialFeedProvider::get();
 		$providers = $providers->toArray();

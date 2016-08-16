@@ -12,8 +12,16 @@ class SocialFeedProvider extends DataObject
 		'Enabled'
 	);
 
+	/**
+	 * Then length of time it takes for the cache to expire
+	 *
+	 * @var int
+	 */
 	private static $default_cache_lifetime = 900; // 15 minutes (900 seconds)
 
+	/**
+	 * @return FieldList
+	 */
 	public function getCMSFields() {
 		if (Controller::has_curr())
 		{
@@ -38,7 +46,10 @@ class SocialFeedProvider extends DataObject
 	}
 
 	/**
-	 * Get feed from provider, will automatically cache the result
+	 * Get feed from provider, will automatically cache the result.
+	 *
+	 * If QueuedJobs module is installed, it will also create a job to update the cache
+	 * 5 minutes before it expires.
 	 *
 	 * @return SS_List
 	 */
@@ -72,6 +83,9 @@ class SocialFeedProvider extends DataObject
 	}
 
 	/**
+	 * Retrieve the providers feed without checking the cache
+	 * first.
+	 *
 	 * @return array
 	 */
 	public function getFeedUncached() {
@@ -79,6 +93,9 @@ class SocialFeedProvider extends DataObject
 	}
 
 	/**
+	 * Get the providers feed from the cache. If there is no cache
+	 * then return false.
+	 *
 	 * @return array
 	 */
 	public function getFeedCache() {
@@ -94,6 +111,11 @@ class SocialFeedProvider extends DataObject
 		return $feed;
 	}
 
+	/**
+	 * Get the time() that the cache expires at.
+	 *
+	 * @return int
+	 */
 	public function getFeedCacheExpiry() {
 		$cache = $this->getCacheFactory();
 		$metadata = $cache->getMetadatas($this->ID);
@@ -103,6 +125,9 @@ class SocialFeedProvider extends DataObject
 		return false;
 	}
 
+	/**
+	 * Set the cache.
+	 */
 	public function setFeedCache(array $feed) {
 		$cache = $this->getCacheFactory();
 		$feedStore = serialize($feed);
@@ -110,6 +135,9 @@ class SocialFeedProvider extends DataObject
 		return $result;
 	}
 
+	/**
+	 * Clear the cache that holds this providers feed.
+	 */
 	public function clearFeedCache() {
 		$cache = $this->getCacheFactory();
 		return $cache->remove($this->ID);

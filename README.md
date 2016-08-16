@@ -35,6 +35,14 @@ Within the `SocialFeed` control loop the following values are available:
 - `$Type` - the type of post, either "facebook", "twitter" or "instagram"
 - `$Created` - the creation/posted date of the post
 - `$Data` - all of the data for a single post in the original structure returned from the API's. Read documentation for the API's to see what's available. 
+ 
+## Caching
+
+All SocialMediaProvider::getFeed() calls are cached for 15 minutes and can be cleared either in the CMS or by appending **?socialfeedclearcache=1** in developer mode.
+
+There is also a SocialFeedCacheTask that you can setup as a cronjob on your server to ensure that the end-user never has to wait for your server to make its API calls to Facebook, Twitter, etc and update the various social feed caches.
+
+Alternatively, if you're using the [QueuedJobs](https://github.com/silverstripe-australia/silverstripe-queuedjobs) module, this process will be handled automatically for you, as a queued job is setup to update the cache every 10 minutes.
 
 ## Requirements
 
