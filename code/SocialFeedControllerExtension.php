@@ -4,12 +4,10 @@ class SocialFeedControllerExtension extends DataExtension
 {
 	public function onBeforeInit()
 	{
-		if (Director::isDev()) {
-			// Allow easy clearing of the cache in dev mode
-			if (isset($_GET['socialfeedclearcache']) && $_GET['socialfeedclearcache'] == 1) {
-				foreach (SocialFeedProvider::get() as $prov) {
-					$prov->clearFeedCache();
-				}
+		// Allow easy clearing of the cache in dev mode
+		if (Director::isDev() && isset($_GET['socialfeedclearcache']) && $_GET['socialfeedclearcache'] == 1) {
+			foreach (SocialFeedProvider::get() as $prov) {
+				$prov->clearFeedCache();
 			}
 		}
 	}
