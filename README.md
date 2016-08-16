@@ -46,7 +46,7 @@ Alternatively, if you're using the [QueuedJobs](https://github.com/silverstripe-
 
 ## Requirements
 
-SilverStripe 3.4 or newer
+SilverStripe 3.1 or newer
 
 ## Twitter
 
