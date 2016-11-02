@@ -66,7 +66,7 @@ The following API endpoint is used `https://graph.facebook.com/PAGE_ID/feed?acce
 [Facebook API documentation](https://developers.facebook.com/docs/graph-api/using-graph-api)
  
 ### Credentials
-[TODO - document how to get necessary credentials]
+To get the necessary Facebook API credentials you'll need to [create a Facebook App](https://developers.facebook.com/apps).
 
 ## Instagram
 The most recent media published for a user.
@@ -74,4 +74,6 @@ The following API endpoint is used `https://api.instagram.com/v1/users/self/medi
 [Instagram API documentation for resent user media](https://www.instagram.com/developer/endpoints/users/#get_users_media_recent_self)
 
 ### Credentials
-[TODO - document how to get necessary credentials]
+To get the necessary Instagram API credentials you'll need to [create an Instagram Client](https://www.instagram.com/developer/clients/manage/).
+
+You'll need to add the correct redirect URI in the settings for the Instagram App, such as http://yoursite.com/admin/social-feed/SocialFeedProviderInstagram/ 
