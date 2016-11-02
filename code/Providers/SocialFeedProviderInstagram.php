@@ -106,6 +106,15 @@ class SocialFeedProviderInstagram extends SocialFeedProvider implements SocialFe
 		return $result['data'];
 	}
 
+	/** 
+	 * @return HTMLText
+	 */
+	public function getPostContent($post) {
+		$text = isset($post['caption']['text']) ? $post['caption']['text'] : '';
+		$result = DBField::create_field('HTMLText', $text);
+		return $result;
+	}
+
 	/**
 	 * Get the creation time from a post
 	 *

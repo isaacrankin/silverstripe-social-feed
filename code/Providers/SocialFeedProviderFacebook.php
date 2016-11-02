@@ -107,6 +107,15 @@ class SocialFeedProviderFacebook extends SocialFeedProvider implements SocialFee
 		return $result['data'];
 	}
 
+	/** 
+	 * @return HTMLText
+	 */
+	public function getPostContent($post) {
+		$text = isset($post['message']) ? $post['message'] : '';
+		$result = DBField::create_field('HTMLText', $text);
+		return $result;
+	}
+
 	/**
 	 * Get the creation time from a post
 	 *

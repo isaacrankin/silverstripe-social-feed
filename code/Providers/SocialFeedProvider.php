@@ -71,6 +71,7 @@ class SocialFeedProvider extends DataObject
 
 				$data[] = array(
 					'Type' => $this->getType(),
+					'Content' => $this->getPostContent($post),
 					'Created' => $created,
 					'URL' => $this->getPostUrl($post),
 					'Data' => $post,

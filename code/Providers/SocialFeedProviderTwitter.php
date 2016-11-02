@@ -50,6 +50,17 @@ class SocialFeedProviderTwitter extends SocialFeedProvider implements SocialFeed
 		return $result;
 	}
 
+	/** 
+	 * @return HTMLText
+	 */
+	public function getPostContent($post) {
+		$text = isset($post->text) ? $post->text : '';
+		$text = preg_replace('/(https?:\/\/[a-z0-9\.\/]+)/i', '<a href="$1" target="_blank">$1</a>', $text); 
+
+		$result = DBField::create_field('HTMLText', $text);
+		return $result;
+	}
+
 	/**
 	 * Get the creation time from a post
 	 *
