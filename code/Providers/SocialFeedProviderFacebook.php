@@ -83,7 +83,7 @@ class SocialFeedProviderFacebook extends SocialFeedProvider implements SocialFee
 			// Get Facebook timestamps in Unix timestamp format
 			'date_format'  => 'U',
 			// Explicitly supply all known 'fields' as the API was returning a minimal fieldset by default.
-			'fields'	   => 'from,message,message_tags,story,story_tags,picture,source,link,object_id,name,caption,description,icon,privacy,type,status_type,created_time,updated_time,shares,is_hidden,is_expired,likes,comments',
+			'fields'	   => 'from,message,message_tags,story,story_tags,full_picture,source,link,object_id,name,caption,description,icon,privacy,type,status_type,created_time,updated_time,shares,is_hidden,is_expired,likes,comments',
 			'access_token' => $accessToken,
 		);
 		$queryParameters = http_build_query($queryParameters);
@@ -103,7 +103,7 @@ class SocialFeedProviderFacebook extends SocialFeedProvider implements SocialFee
 			break;
 		}
 		$result = $provider->getResponse($request);
-		
+
 		return $result['data'];
 	}
 
@@ -135,5 +135,25 @@ class SocialFeedProviderFacebook extends SocialFeedProvider implements SocialFee
 		return '';
 	}
 
+	/**
+	 * Get the user who made the post
+	 *
+	 * @param $post
+	 * @return mixed
+	 */
+	public function getUserName($post)
+	{
+		return $post['from']['name'];
+	}
 
+	/**
+	 * Get the primary image for the post
+	 *
+	 * @param $post
+	 * @return mixed
+	 */
+	public function getImage($post)
+	{
+		return (isset($post['full_picture'])) ? $post['full_picture'] : null;
+	}
 }

@@ -71,4 +71,28 @@ class SocialFeedProviderTwitter extends SocialFeedProvider implements SocialFeed
 	{
 		return 'https://twitter.com/' . (string) $post->user->id .'/status/' . (string) $post->id;
 	}
+
+	/**
+	 * The user's name who tweeted
+	 *
+	 * @param $post
+	 * @return mixed
+	 */
+	public function getUserName($post)
+	{
+		return $post->user->name;
+	}
+
+	/**
+	 * The first image for a Tweet
+	 *
+	 * @param $post
+	 * @return mixed
+	 */
+	public function getImage($post)
+	{
+		if(property_exists($post->entities, 'media') && $post->entities->media[0]->media_url_https) {
+			return $post->entities->media[0]->media_url_https;
+		}
+	}
 }

@@ -56,11 +56,11 @@ class SocialFeedProvider extends DataObject
 	public function getFeed() {
 		$feed = $this->getFeedCache();
 		if (!$feed) {
-		    $feed = $this->getFeedUncached();
-		    $this->setFeedCache($feed);
-		    if (class_exists('AbstractQueuedJob')) {
-		    	singleton('SocialFeedCacheQueuedJob')->createJob($this);
-		    }
+			$feed = $this->getFeedUncached();
+			$this->setFeedCache($feed);
+			if (class_exists('AbstractQueuedJob')) {
+				singleton('SocialFeedCacheQueuedJob')->createJob($this);
+			}
 		}
 
 		$data = array();
@@ -74,19 +74,20 @@ class SocialFeedProvider extends DataObject
 					'Created' => $created,
 					'URL' => $this->getPostUrl($post),
 					'Data' => $post,
+					'UserName' => $this->getUserName($post),
+					'Image' => $this->getImage($post)
 				);
 			}
 		}
+
 		$result = ArrayList::create($data);
 		$result = $result->sort('Created', 'DESC');
 		return $result;
 	}
 
 	/**
-	 * Retrieve the providers feed without checking the cache
-	 * first.
-	 *
-	 * @return array
+	 * Retrieve the providers feed without checking the cache first.
+	 * @throws Exception
 	 */
 	public function getFeedUncached() {
 		throw new Exception($this->class.' missing implementation for '.__FUNCTION__);

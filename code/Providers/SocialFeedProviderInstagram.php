@@ -127,4 +127,26 @@ class SocialFeedProviderInstagram extends SocialFeedProvider implements SocialFe
 	{
 		return $post['link'];
 	}
+
+	/**
+	 * Get the user who created the post
+	 *
+	 * @param $post
+	 * @return mixed
+	 */
+	public function getUserName($post)
+	{
+		return $post['user']['username'];
+	}
+
+	/**
+	 * Get the primary image for the post
+	 *
+	 * @param $post
+	 * @return mixed
+	 */
+	public function getImage($post)
+	{
+		return $post['images']['standard_resolution']['url'];
+	}
 }
