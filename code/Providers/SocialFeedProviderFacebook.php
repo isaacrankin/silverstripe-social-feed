@@ -107,7 +107,7 @@ class SocialFeedProviderFacebook extends SocialFeedProvider implements SocialFee
 		return $result['data'];
 	}
 
-	/** 
+	/**
 	 * @return HTMLText
 	 */
 	public function getPostContent($post) {
@@ -141,7 +141,7 @@ class SocialFeedProviderFacebook extends SocialFeedProvider implements SocialFee
 			// For $post['type'] === 'link' && $post['status_type'] === 'shared_story'
 			return $post['link'];
 		}
-		return '';
+		return null;
 	}
 
 	/**

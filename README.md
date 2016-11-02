@@ -12,20 +12,22 @@ Each feed is available separately also.
 Alternatively you can call the `SocialFeed` method directly like so:
 
 ```
-<ol>
-	<% loop SocialFeed %>
-		<li>
-			<a href="$URL" target="_blank">
-				<h4>Type: $Type</h4>
-				<p>Created: $Created</p>
-				<!-- Use $Data attribute for provider specific data -->
-			</a>
-		</li>
-	<% end_loop %>
-</ol>
+<div class="social-feed">
+	<ol>
+		<% loop SocialFeed %>
+			<li>
+				<a href="$URL" target="_blank">
+					<h4>Type: $Type</h4>
+					<p>Created: $Created</p>
+					<p>User: $UserName</p>
+					<p><img src="$Image" /></p>
+					<p>$Content</p>
+				</a>
+			</li>
+		<% end_loop %>
+	</ol>
+</div>
 ```
-
-[See a more detailed example](https://github.com/isaacrankin/silverstripe-social-feed/blob/master/templates/includes/SocialFeed.ss)
 
 The posts are ordered from newest to oldest. 
 
@@ -34,6 +36,8 @@ Within the `SocialFeed` control loop the following values are available:
 - `$URL` - a URL for the social media post
 - `$Type` - the type of post, either "facebook", "twitter" or "instagram"
 - `$Created` - the creation/posted date of the post
+- `$UserName` - the user who made the post
+- `$Image` - the main image for the post
 - `$Data` - all of the data for a single post in the original structure returned from the API's. Read documentation for the API's to see what's available. 
  
 ## Caching
