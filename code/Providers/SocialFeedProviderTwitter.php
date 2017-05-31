@@ -8,7 +8,8 @@ class SocialFeedProviderTwitter extends SocialFeedProvider implements SocialFeed
 		'ConsumerKey' => 'Varchar(400)',
 		'ConsumerSecret' => 'Varchar(400)',
 		'AccessToken' => 'Varchar(400)',
-		'AccessTokenSecret' => 'Varchar(400)'
+		'AccessTokenSecret' => 'Varchar(400)',
+        'ScreenName' => 'Varchar',
 	);
 
 	private static $singular_name = 'Twitter Provider';
@@ -43,7 +44,12 @@ class SocialFeedProviderTwitter extends SocialFeedProvider implements SocialFeed
 	{
 		// NOTE: Twitter doesn't implement OAuth 2 so we can't use https://github.com/thephpleague/oauth2-client
 		$connection = new TwitterOAuth($this->ConsumerKey, $this->ConsumerSecret, $this->AccessToken, $this->AccessTokenSecret);
-		$result = $connection->get('statuses/user_timeline', ['count' => 25, 'exclude_replies' => true]);
+        $parameters = ['count' => 25, 'exclude_replies' => true];
+        if($this->ScreenName)
+        {
+            $parameters['screen_name'] = $this->ScreenName;
+        }
+		$result = $connection->get('statuses/user_timeline', $parameters);
 		if (isset($result->error)) {
 			user_error($result->error, E_USER_WARNING);
 		}
