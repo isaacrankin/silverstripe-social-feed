@@ -57,6 +57,7 @@ class SocialFeedProvider extends DataObject
 		$feed = $this->getFeedCache();
 		if (!$feed) {
 			$feed = $this->getFeedUncached();
+			$this->extend('updateFeedUncachedData', $feed);
 			$this->setFeedCache($feed);
 			if (class_exists('AbstractQueuedJob')) {
 				singleton('SocialFeedCacheQueuedJob')->createJob($this);
