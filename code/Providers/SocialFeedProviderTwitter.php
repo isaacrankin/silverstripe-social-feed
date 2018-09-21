@@ -10,6 +10,11 @@ class SocialFeedProviderTwitter extends SocialFeedProvider implements SocialFeed
 		'AccessToken' => 'Varchar(400)',
 		'AccessTokenSecret' => 'Varchar(400)',
         'ScreenName' => 'Varchar',
+		'TweetModeExtended' => 'Boolean'
+	);
+
+	private static $field_labels = array (
+		'TweetModeExtended' => 'Extended Mode'
 	);
 
 	private static $singular_name = 'Twitter Provider';
@@ -49,6 +54,10 @@ class SocialFeedProviderTwitter extends SocialFeedProvider implements SocialFeed
         {
             $parameters['screen_name'] = $this->ScreenName;
         }
+		if($this->TweetModeExtended)
+		{
+			$parameters['tweet_mode'] = "extended";
+		}
 		$result = $connection->get('statuses/user_timeline', $parameters);
 		if (isset($result->error)) {
 			user_error($result->error, E_USER_WARNING);
@@ -60,7 +69,12 @@ class SocialFeedProviderTwitter extends SocialFeedProvider implements SocialFeed
 	 * @return HTMLText
 	 */
 	public function getPostContent($post) {
-		$text = isset($post->text) ? $post->text : '';
+		$text = '';
+		if($this->TweetModeExtended && isset($post->full_text)) {
+			$text = $post->full_text;
+		} elseif(isset($post->text)) {
+			$text = $post->text;
+		}
 		$text = preg_replace('/(https?:\/\/[a-z0-9\.\/]+)/i', '<a href="$1" target="_blank">$1</a>', $text); 
 
 		$result = DBField::create_field('HTMLText', $text);
