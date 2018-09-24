@@ -1,5 +1,5 @@
 {
-	"name": "isaacrankin/silverstripe-social-feed",
+	"name": "magnusbengtsson/silverstripe-social-feed",
 	"description": "A social feed module for fetching content from Facebook and Twitter",
 	"type": "silverstripe-module",
 	"homepage": "http://github.com/isaacrankin/silverstripe-social-feed",
