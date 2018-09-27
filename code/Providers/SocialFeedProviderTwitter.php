@@ -9,12 +9,14 @@ class SocialFeedProviderTwitter extends SocialFeedProvider implements SocialFeed
 		'ConsumerSecret' => 'Varchar(400)',
 		'AccessToken' => 'Varchar(400)',
 		'AccessTokenSecret' => 'Varchar(400)',
-        'ScreenName' => 'Varchar',
-		'TweetModeExtended' => 'Boolean'
+		'ScreenName' => 'Varchar',
+		'TweetModeExtended' => 'Boolean',
+		'ShowReTweetedImages' => 'Boolean',
 	);
 
 	private static $field_labels = array (
-		'TweetModeExtended' => 'Extended Mode'
+		'TweetModeExtended' => 'Extended mode (use if images are not showing)',
+		'ShowReTweetedImages' => 'Show images in re-tweets'
 	);
 
 	private static $singular_name = 'Twitter Provider';
@@ -49,11 +51,11 @@ class SocialFeedProviderTwitter extends SocialFeedProvider implements SocialFeed
 	{
 		// NOTE: Twitter doesn't implement OAuth 2 so we can't use https://github.com/thephpleague/oauth2-client
 		$connection = new TwitterOAuth($this->ConsumerKey, $this->ConsumerSecret, $this->AccessToken, $this->AccessTokenSecret);
-        $parameters = ['count' => 25, 'exclude_replies' => true];
-        if($this->ScreenName)
-        {
-            $parameters['screen_name'] = $this->ScreenName;
-        }
+		$parameters = ['count' => 25, 'exclude_replies' => true];
+		if($this->ScreenName)
+		{
+			$parameters['screen_name'] = $this->ScreenName;
+		}
 		if($this->TweetModeExtended)
 		{
 			$parameters['tweet_mode'] = "extended";
@@ -65,7 +67,7 @@ class SocialFeedProviderTwitter extends SocialFeedProvider implements SocialFeed
 		return $result;
 	}
 
-	/** 
+	/**
 	 * @return HTMLText
 	 */
 	public function getPostContent($post) {
@@ -124,6 +126,8 @@ class SocialFeedProviderTwitter extends SocialFeedProvider implements SocialFeed
 	{
 		if(property_exists($post->entities, 'media') && $post->entities->media[0]->media_url_https) {
 			return $post->entities->media[0]->media_url_https;
+		} elseif($this->ShowReTweetedImages && isset($post->retweeted_status) && property_exists($post->retweeted_status, 'entities')&& property_exists($post->retweeted_status->entities, 'media') && $post->retweeted_status->entities->media[0]->media_url_https) {
+			return $post->retweeted_status->entities->media[0]->media_url_https;
 		}
 	}
 }
