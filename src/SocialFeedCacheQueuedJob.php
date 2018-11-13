@@ -1,6 +1,12 @@
 <?php
 
-if (!class_exists('AbstractQueuedJob')) {
+namespace IsaacRankin\SocialFeed;
+
+use Symbiote\QueuedJobs\Services\AbstractQueuedJob;
+use SilverStripe\Core\Config\Config;
+
+
+if (!class_exists('Symbiote\QueuedJobs\Services\AbstractQueuedJob')) {
 	return;
 }
 

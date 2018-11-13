@@ -1,7 +1,7 @@
 {
 	"name": "isaacrankin/silverstripe-social-feed",
 	"description": "A social feed module for fetching content from Facebook and Twitter",
-	"type": "silverstripe-module",
+	"type": "silverstripe-vendormodule",
 	"homepage": "http://github.com/isaacrankin/silverstripe-social-feed",
 	"keywords": ["silverstripe", "facebook", "twitter", "instagram", "social feed"],
 	"license": "BSD-3-Clause",
@@ -17,10 +17,9 @@
 		"installer-name": "social-feed"
 	},
 	"require": {
-		"silverstripe/cms": "~3.1",
-		"silverstripe/framework": "~3.1",
-		"league/oauth2-facebook": "~1.0",
-		"league/oauth2-instagram": "^0.2.2",
-		"abraham/twitteroauth": "^0.6.4"
+		"silverstripe/framework": "^4",
+        "abraham/twitteroauth": "^0.9.2",
+        "league/oauth2-facebook": "^2.0",
+        "league/oauth2-instagram": "^2.0"
 	}
 }
