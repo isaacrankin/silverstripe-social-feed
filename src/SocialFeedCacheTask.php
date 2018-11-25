@@ -1,5 +1,12 @@
 <?php
 
+namespace IsaacRankin\SocialFeed;
+
+use SilverStripe\Dev\BuildTask;
+use IsaacRankin\SocialFeed\Providers\SocialFeedProvider;
+use SilverStripe\ORM\DB;
+
+
 class SocialFeedCacheTask extends BuildTask {
 	protected $title       = 'Social Feed Pre-Load Task';
 	protected $description = 'Calls getFeed on each SocialFeedProvider and caches it. This task exists so a cronjob can be setup to update social feeds without exposing an end user to slowdown.';

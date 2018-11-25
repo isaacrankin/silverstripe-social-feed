@@ -1,5 +1,16 @@
 <?php
 
+namespace IsaacRankin\SocialFeed\Providers;
+
+use SilverStripe\ORM\DataObject;
+use SilverStripe\Control\Controller;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\ORM\FieldType\DBDatetime;
+use SilverStripe\ORM\ArrayList;
+use SilverStripe\ORM\Exception;
+use Psr\SimpleCache\CacheInterface;
+use SilverStripe\Core\Injector\Injector;
+
 class SocialFeedProvider extends DataObject
 {
 	private static $db = array(
@@ -12,12 +23,7 @@ class SocialFeedProvider extends DataObject
 		'Enabled'
 	);
 
-	/**
-	 * Then length of time it takes for the cache to expire
-	 *
-	 * @var int
-	 */
-	private static $default_cache_lifetime = 900; // 15 minutes (900 seconds)
+	private static $table_name = 'SocialFeedProvider';
 
 	/**
 	 * @return FieldList
@@ -67,8 +73,15 @@ class SocialFeedProvider extends DataObject
 		$data = array();
 		if ($feed) {
 			foreach ($feed as $post) {
-				$created = SS_Datetime::create();
-				$created->setValue($this->getPostCreated($post));
+				$created = DBDatetime::create();
+
+				$timestamp = $this->getPostCreated($post);
+
+				if (!is_numeric($timestamp)) {
+					$timestamp = strtotime($this->getPostCreated($post));
+				}
+
+				$created->setValue($timestamp);
 
 				$data[] = array(
 					'Type' => $this->getType(),
@@ -103,7 +116,7 @@ class SocialFeedProvider extends DataObject
 	 */
 	public function getFeedCache() {
 		$cache = $this->getCacheFactory();
-		$feedStore = $cache->load($this->ID);
+		$feedStore = $cache->get($this->ID);
 		if (!$feedStore) {
 			return false;
 		}
@@ -134,7 +147,7 @@ class SocialFeedProvider extends DataObject
 	public function setFeedCache(array $feed) {
 		$cache = $this->getCacheFactory();
 		$feedStore = serialize($feed);
-		$result = $cache->save($feedStore, $this->ID);
+		$result = $cache->set($this->ID, $feedStore);
 		return $result;
 	}
 
@@ -150,8 +163,7 @@ class SocialFeedProvider extends DataObject
 	 * @return Zend_Cache_Frontend_Output
 	 */
 	protected function getCacheFactory() {
-		$cache = SS_Cache::factory('SocialFeedProvider');
-		$cache->setLifetime($this->config()->default_cache_lifetime);
+		$cache = Injector::inst()->get(CacheInterface::class . '.SocialFeedProvider');
 		return $cache;
 	}
 }

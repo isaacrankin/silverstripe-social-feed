@@ -1,6 +1,14 @@
 <?php
 
-use \League\OAuth2\Client\Provider\Instagram;
+namespace IsaacRankin\SocialFeed\Providers;
+
+use League\OAuth2\Client\Provider\Instagram;
+use IsaacRankin\SocialFeed\SocialFeedProviderInterface;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\RequiredFields;
+use SilverStripe\Control\Director;
+use SilverStripe\ORM\Exception;
+use SilverStripe\ORM\FieldType\DBField;
 
 class SocialFeedProviderInstagram extends SocialFeedProvider implements SocialFeedProviderInterface
 {
@@ -10,8 +18,10 @@ class SocialFeedProviderInstagram extends SocialFeedProvider implements SocialFe
 		'AccessToken' => 'Varchar(400)'
 	);
 
+	private static $table_name = 'SocialFeedProviderInstagram';
+
 	private static $singular_name = 'Instagram Provider';
-	private static $plural_name = 'Instagram Provider\'s';
+	private static $plural_name = 'Instagram Providers';
 
 	private $authBaseURL = 'https://api.instagram.com/oauth/authorize/';
 
@@ -20,12 +30,12 @@ class SocialFeedProviderInstagram extends SocialFeedProvider implements SocialFe
 	public function getCMSFields()
 	{
 		$fields = parent::getCMSFields();
-		$fields->addFieldsToTab('Root.Main', new LiteralField('sf_html_1', '<h4>To get the necessary Instagram API credentials you\'ll need to create an <a href="https://www.instagram.com/developer/clients/manage/" target="_blank">Instagram Client.</a></h4>'), 'Label');
-		$fields->addFieldsToTab('Root.Main', new LiteralField('sf_html_2', '<p>You\'ll need to add the following redirect URI <code>' . $this->getRedirectUri() . '</code> in the settings for the Instagram App.</p>'), 'Label');
+		$fields->addFieldsToTab('Root.Main', LiteralField::create('sf_html_1', '<h4>To get the necessary Instagram API credentials you\'ll need to create an <a href="https://www.instagram.com/developer/clients/manage/" target="_blank">Instagram Client.</a></h4>'), 'Label');
+		$fields->addFieldsToTab('Root.Main', LiteralField::create('sf_html_2', '<p>You\'ll need to add the following redirect URI <code>' . $this->getRedirectUri() . '</code> in the settings for the Instagram App.</p>'), 'Label');
 
 		if ($this->ClientID && $this->ClientSecret) {
 			$url = $this->authBaseURL . '?client_id=' . $this->ClientID . '&response_type=code&redirect_uri=' . $this->getRedirectUri() . '?provider_id=' . $this->ID;
-			$fields->addFieldsToTab('Root.Main', new LiteralField('sf_html_3', '<p><a href="' . $url . '"><button type="button">Authorize App to get Access Token</a></button>'), 'Label');
+			$fields->addFieldsToTab('Root.Main', LiteralField::create('sf_html_3', '<p><a href="' . $url . '"><button type="button">Authorize App to get Access Token</a></button>'), 'Label');
 		}
 
 		return $fields;
@@ -33,7 +43,7 @@ class SocialFeedProviderInstagram extends SocialFeedProvider implements SocialFe
 
 	public function getCMSValidator()
 	{
-		return new RequiredFields(array('ClientID', 'ClientSecret'));
+		return RequiredFields::create(array('ClientID', 'ClientSecret'));
 	}
 
 	/**
@@ -103,10 +113,11 @@ class SocialFeedProviderInstagram extends SocialFeedProvider implements SocialFe
 			user_error($e->getMessage() . $errorHelpMessage, E_USER_WARNING);
 			$result['data'] = array();
 		}
-		return $result['data'];
+		$output = json_decode($result->getBody(), 1);
+		return $output['data'];
 	}
 
-	/** 
+	/**
 	 * @return HTMLText
 	 */
 	public function getPostContent($post) {

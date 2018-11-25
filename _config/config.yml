@@ -1,7 +1,12 @@
 ---
 Name: socialfeed
 ---
-
-ContentController:
+SilverStripe\CMS\Controllers\ContentController:
   extensions:
-    - SocialFeedControllerExtension
+    - IsaacRankin\SocialFeed\SocialFeedControllerExtension
+SilverStripe\Core\Injector\Injector:
+  Psr\SimpleCache\CacheInterface.SocialFeedProvider:
+    factory: SilverStripe\Core\Cache\CacheFactory
+    constructor:
+      namespace: "SocialFeedProvider"
+      defaultLifetime: 900

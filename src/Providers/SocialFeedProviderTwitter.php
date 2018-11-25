@@ -1,6 +1,14 @@
 <?php
 
-use \Abraham\TwitterOAuth\TwitterOAuth;
+namespace IsaacRankin\SocialFeed\Providers;
+
+
+use Abraham\TwitterOAuth\TwitterOAuth;
+use IsaacRankin\SocialFeed\SocialFeedProviderInterface;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\RequiredFields;
+use SilverStripe\ORM\FieldType\DBField;
+
 
 class SocialFeedProviderTwitter extends SocialFeedProvider implements SocialFeedProviderInterface
 {
@@ -20,21 +28,23 @@ class SocialFeedProviderTwitter extends SocialFeedProvider implements SocialFeed
 	);
 
 	private static $singular_name = 'Twitter Provider';
-	private static $plural_name = 'Twitter Provider\'s';
+	private static $plural_name = 'Twitter Providers';
+
+	private static $table_name = 'SocialFeedProviderTwitter';
 
 	private $type = 'twitter';
 
 	public function getCMSFields()
 	{
 		$fields = parent::getCMSFields();
-		$fields->addFieldsToTab('Root.Main', new LiteralField('sf_html_1', '<h4>To get the necessary Twitter API credentials you\'ll need to create a <a href="https://apps.twitter.com" target="_blank">Twitter App.</a></h4>'), 'Label');
-		$fields->addFieldsToTab('Root.Main', new LiteralField('sf_html_2', '<p>You can manually grant permissions to the Twitter App, this will give you an Access Token and Access Token Secret.</h5><p>&nbsp;</p>'), 'Label');
+		$fields->addFieldsToTab('Root.Main', LiteralField::create('sf_html_1', '<h4>To get the necessary Twitter API credentials you\'ll need to create a <a href="https://apps.twitter.com" target="_blank">Twitter App.</a></h4>'), 'Label');
+		$fields->addFieldsToTab('Root.Main', LiteralField::create('sf_html_2', '<p>You can manually grant permissions to the Twitter App, this will give you an Access Token and Access Token Secret.</h5><p>&nbsp;</p>'), 'Label');
 		return $fields;
 	}
 
 	public function getCMSValidator()
 	{
-		return new RequiredFields(array('ConsumerKey', 'ConsumerSecret'));
+		return RequiredFields::create(array('ConsumerKey', 'ConsumerSecret'));
 	}
 
 	/**
@@ -71,14 +81,13 @@ class SocialFeedProviderTwitter extends SocialFeedProvider implements SocialFeed
 	 * @return HTMLText
 	 */
 	public function getPostContent($post) {
-		$text = '';
+		$text = isset($post->text) ? $post->text : '';
 		if($this->TweetModeExtended && isset($post->full_text)) {
 			$text = $post->full_text;
 		} elseif(isset($post->text)) {
 			$text = $post->text;
 		}
-		$text = preg_replace('/(https?:\/\/[a-z0-9\.\/]+)/i', '<a href="$1" target="_blank">$1</a>', $text); 
-
+		$text = preg_replace('/(https?:\/\/[a-z0-9\.\/]+)/i', '<a href="$1" target="_blank">$1</a>', $text);
 		$result = DBField::create_field('HTMLText', $text);
 		return $result;
 	}

@@ -1,5 +1,7 @@
 <?php
 
+namespace IsaacRankin\SocialFeed;
+
 interface SocialFeedProviderInterface
 {
 	public function getType();
