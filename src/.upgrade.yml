@@ -1,0 +1,10 @@
+mappings:
+  SocialFeedAdmin: IsaacRankin\SocialFeed\SocialFeedAdmin
+  SocialFeedCacheQueuedJob: IsaacRankin\SocialFeed\SocialFeedCacheQueuedJob
+  SocialFeedCacheTask: IsaacRankin\SocialFeed\SocialFeedCacheTask
+  SocialFeedControllerExtension: IsaacRankin\SocialFeed\SocialFeedControllerExtension
+  SocialFeedProviderInterface: IsaacRankin\SocialFeed\SocialFeedProviderInterface
+  SocialFeedProvider: IsaacRankin\SocialFeed\Providers\SocialFeedProvider
+  SocialFeedProviderFacebook: IsaacRankin\SocialFeed\Providers\SocialFeedProviderFacebook
+  SocialFeedProviderInstagram: IsaacRankin\SocialFeed\Providers\SocialFeedProviderInstagram
+  SocialFeedProviderTwitter: IsaacRankin\SocialFeed\Providers\SocialFeedProviderTwitter

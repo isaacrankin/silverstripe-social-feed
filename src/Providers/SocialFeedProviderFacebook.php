@@ -1,6 +1,16 @@
 <?php
 
-use \League\OAuth2\Client\Provider\Facebook;
+namespace IsaacRankin\SocialFeed\Providers;
+
+
+use League\OAuth2\Client\Provider\Facebook;
+use IsaacRankin\SocialFeed\SocialFeedProviderInterface;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\RequiredFields;
+use SilverStripe\ORM\Exception;
+use SilverStripe\ORM\FieldType\DBField;
+
 
 class SocialFeedProviderFacebook extends SocialFeedProvider implements SocialFeedProviderInterface
 {
@@ -12,8 +22,10 @@ class SocialFeedProviderFacebook extends SocialFeedProvider implements SocialFee
 		'FacebookType' => 'Int',
 	);
 
+	private static $table_name = 'SocialFeedProviderFacebook';
+
 	private static $singular_name = 'Facebook Provider';
-	private static $plural_name = 'Facebook Provider\'s';
+	private static $plural_name = 'Facebook Providers';
 
 	private static $summary_fields = array(
 		'Label',
@@ -33,7 +45,7 @@ class SocialFeedProviderFacebook extends SocialFeedProvider implements SocialFee
 	public function getCMSFields()
 	{
 		$fields = parent::getCMSFields();
-		$fields->addFieldsToTab('Root.Main', new LiteralField('sf_html_1', '<h4>To get the necessary Facebook API credentials you\'ll need to create a <a href="https://developers.facebook.com/apps" target="_blank">Facebook App.</a></h4><p>&nbsp;</p>'), 'Label');
+		$fields->addFieldsToTab('Root.Main', LiteralField::create('sf_html_1', '<h4>To get the necessary Facebook API credentials you\'ll need to create a <a href="https://developers.facebook.com/apps" target="_blank">Facebook App.</a></h4><p>&nbsp;</p>'), 'Label');
 		$fields->replaceField('FacebookType', DropdownField::create('FacebookType', 'Facebook Type', $this->config()->facebook_types));
 		$fields->removeByName('AccessToken');
 		return $fields;
@@ -103,8 +115,9 @@ class SocialFeedProviderFacebook extends SocialFeedProvider implements SocialFee
 			break;
 		}
 		$result = $provider->getResponse($request);
+		$output = json_decode($result->getBody(), 1);
 
-		return $result['data'];
+		return $output['data'];
 	}
 
 	/**
