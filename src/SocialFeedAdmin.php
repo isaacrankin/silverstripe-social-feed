@@ -20,6 +20,8 @@ class SocialFeedAdmin extends ModelAdmin
 	private static $url_segment = 'social-feed';
 
 	private static $menu_title = 'Social Feed';
+	
+	private static $menu_icon_class = 'font-icon-share';
 
 	public function init()
 	{
