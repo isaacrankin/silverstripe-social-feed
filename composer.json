@@ -1,5 +1,5 @@
 {
-	"name": "magnusbengtsson/silverstripe-social-feed",
+	"name": "isaacrankin/silverstripe-social-feed",
 	"description": "A social feed module for fetching content from Facebook and Twitter",
 	"type": "silverstripe-vendormodule",
 	"homepage": "http://github.com/isaacrankin/silverstripe-social-feed",
@@ -11,7 +11,7 @@
 		}
 	],
 	"support": {
-		"issues": "http://github.com/magnusbengtsson/silverstripe-social-feed/issues"
+		"issues": "http://github.com/isaacrankin/silverstripe-social-feed/issues"
 	},
 	"extra": {
 		"installer-name": "social-feed"
